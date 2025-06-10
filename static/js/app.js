@@ -94,6 +94,9 @@ async function handleSingleRequest(event) {
 }
 
 function displayAnalysisResults(result) {
+    // Store result for export functionality
+    currentAnalysisResult = result;
+    
     document.getElementById('analysis-results').style.display = 'block';
     
     // Basic Info
@@ -495,6 +498,86 @@ async function exportData(format) {
         console.error('Error exporting data:', error);
         alert('Error exporting data');
     }
+}
+
+// Global variable to store current analysis result
+let currentAnalysisResult = null;
+
+async function exportAnalysisData(format) {
+    if (!currentAnalysisResult) {
+        alert('No analysis data available to export. Please run an analysis first.');
+        return;
+    }
+    
+    try {
+        if (format === 'json') {
+            downloadJSON(currentAnalysisResult, 'single-analysis-export.json');
+        } else if (format === 'curl') {
+            const curlCommand = generateCurlCommand(currentAnalysisResult);
+            downloadText(curlCommand, 'api-curl-command.txt');
+        } else if (format === 'report') {
+            const report = generateAnalysisReport(currentAnalysisResult);
+            downloadText(report, 'api-analysis-report.txt');
+        }
+    } catch (error) {
+        console.error('Error exporting analysis data:', error);
+        alert('Error exporting analysis data');
+    }
+}
+
+function generateCurlCommand(result) {
+    const url = result.url || 'https://api.example.com/endpoint';
+    const method = result.method || 'GET';
+    
+    let curlCommand = `curl -X ${method} "${url}"`;
+    
+    // Add headers if available
+    if (result.request_headers) {
+        for (const [key, value] of Object.entries(result.request_headers)) {
+            curlCommand += ` \\\n  -H "${key}: ${value}"`;
+        }
+    }
+    
+    // Add data if it was a POST/PUT request
+    if (result.request_data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+        curlCommand += ` \\\n  -d '${JSON.stringify(result.request_data)}'`;
+    }
+    
+    return curlCommand;
+}
+
+function generateAnalysisReport(result) {
+    const timestamp = new Date().toISOString();
+    
+    return `API Analysis Report
+Generated: ${timestamp}
+
+=== BASIC INFORMATION ===
+URL: ${result.url || 'N/A'}
+Method: ${result.method || 'N/A'}
+Status Code: ${result.status_code || 'N/A'}
+Response Time: ${result.response_time || 'N/A'}ms
+Content Type: ${result.content_type || 'N/A'}
+Content Length: ${result.content_length || 'N/A'} bytes
+Encoding: ${result.encoding || 'N/A'}
+
+=== SECURITY ANALYSIS ===
+HTTPS: ${result.security?.https ? 'Enabled' : 'Disabled'}
+Authentication: ${result.security?.auth_type || 'None detected'}
+Security Headers: ${result.security?.security_headers?.join(', ') || 'None'}
+Vulnerabilities: ${result.security?.vulnerabilities?.join(', ') || 'None detected'}
+
+=== API PATTERNS ===
+API Type: ${result.patterns?.api_type?.join(', ') || 'Unknown'}
+Features: ${result.patterns?.features?.join(', ') || 'None detected'}
+
+=== RESPONSE HEADERS ===
+${Object.entries(result.response_headers || {}).map(([key, value]) => `${key}: ${value}`).join('\n')}
+
+=== RESPONSE DATA ===
+${typeof result.response_data === 'object' ? JSON.stringify(result.response_data, null, 2) : result.response_data || 'No response data'}
+
+=== END OF REPORT ===`;
 }
 
 async function generateDocs() {

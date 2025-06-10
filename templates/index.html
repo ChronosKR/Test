@@ -131,8 +131,19 @@
                     <!-- Results Section -->
                     <div id="analysis-results" class="mt-4" style="display: none;">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5><i class="fas fa-chart-line"></i> Analysis Results</h5>
+                                <div id="export-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="exportAnalysisData('json')">
+                                        <i class="fas fa-download"></i> Export JSON
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="exportAnalysisData('curl')">
+                                        <i class="fas fa-terminal"></i> Export cURL
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" onclick="exportAnalysisData('report')">
+                                        <i class="fas fa-file-alt"></i> Export Report
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
