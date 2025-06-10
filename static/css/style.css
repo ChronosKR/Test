@@ -1,0 +1,342 @@
+/* Custom styles for the Reverse API Engineering Tool */
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    font-weight: 600;
+}
+
+.status-badge {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.status-200 { background-color: #d4edda; color: #155724; }
+.status-300 { background-color: #fff3cd; color: #856404; }
+.status-400 { background-color: #f8d7da; color: #721c24; }
+.status-500 { background-color: #f5c6cb; color: #721c24; }
+
+.security-good { color: #28a745; }
+.security-warning { color: #ffc107; }
+.security-danger { color: #dc3545; }
+
+.pattern-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    margin: 0.125rem;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.pattern-badge.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.response-time {
+    font-weight: bold;
+}
+
+.response-time.fast { color: #28a745; }
+.response-time.medium { color: #ffc107; }
+.response-time.slow { color: #dc3545; }
+
+.vulnerability-item {
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 0.25rem;
+    color: #856404;
+}
+
+.vulnerability-item.high {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.endpoint-card {
+    border-left: 4px solid #007bff;
+    margin-bottom: 1rem;
+}
+
+.endpoint-card.get { border-left-color: #28a745; }
+.endpoint-card.post { border-left-color: #007bff; }
+.endpoint-card.put { border-left-color: #ffc107; }
+.endpoint-card.delete { border-left-color: #dc3545; }
+.endpoint-card.patch { border-left-color: #6f42c1; }
+
+.method-badge {
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.method-get { background-color: #d4edda; color: #155724; }
+.method-post { background-color: #cce5ff; color: #004085; }
+.method-put { background-color: #fff3cd; color: #856404; }
+.method-delete { background-color: #f8d7da; color: #721c24; }
+.method-patch { background-color: #e2d9f3; color: #6f42c1; }
+
+.json-key {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.json-string {
+    color: #009900;
+}
+
+.json-number {
+    color: #cc6600;
+}
+
+.json-boolean {
+    color: #990099;
+}
+
+.json-null {
+    color: #999999;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #dee2e6;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.75rem;
+    top: 0.5rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: #007bff;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.code-block {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+.highlight {
+    background-color: #fff3cd;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.125rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.progress-custom {
+    height: 0.5rem;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.progress-bar-custom {
+    height: 100%;
+    background-color: #007bff;
+    transition: width 0.3s ease;
+}
+
+.tooltip-custom {
+    position: relative;
+    cursor: help;
+}
+
+.tooltip-custom:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 0.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .timeline {
+        padding-left: 1rem;
+    }
+    
+    .timeline::before {
+        left: 0.25rem;
+    }
+    
+    .timeline-item::before {
+        left: -1.25rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #212529;
+        color: #fff;
+    }
+    
+    .card {
+        background-color: #343a40;
+        border-color: #495057;
+    }
+    
+    .card-header {
+        background-color: #495057;
+        border-color: #6c757d;
+    }
+    
+    .code-block {
+        background-color: #495057;
+        border-color: #6c757d;
+        color: #fff;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .tab-content {
+        display: block !important;
+    }
+}

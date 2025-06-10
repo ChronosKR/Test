@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Reverse API Engineering Tool</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-search-plus"></i> API Reverse Engineering Tool
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text">
+                    <i class="fas fa-graduation-cap"></i> Educational Tool for CS Students
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tools"></i> Tools</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" onclick="showTab('single-request')">
+                                <i class="fas fa-search"></i> Single Request
+                            </button>
+                            <button class="btn btn-info" onclick="showTab('batch-analysis')">
+                                <i class="fas fa-layer-group"></i> Batch Analysis
+                            </button>
+                            <button class="btn btn-success" onclick="showTab('endpoint-discovery')">
+                                <i class="fas fa-compass"></i> Endpoint Discovery
+                            </button>
+                            <button class="btn btn-warning" onclick="showTab('captured-requests')">
+                                <i class="fas fa-history"></i> Captured Requests
+                            </button>
+                            <button class="btn btn-secondary" onclick="showTab('documentation')">
+                                <i class="fas fa-book"></i> Generate Docs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6><i class="fas fa-info-circle"></i> Quick Help</h6>
+                    </div>
+                    <div class="card-body">
+                        <small>
+                            <strong>Getting Started:</strong><br>
+                            1. Enter an API URL<br>
+                            2. Configure headers/data<br>
+                            3. Click "Analyze"<br>
+                            4. Review security & patterns<br>
+                            5. Export or document findings
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Single Request Tab -->
+                <div id="single-request" class="tab-content active">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-search"></i> Single API Request Analysis</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="single-request-form">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label class="form-label">API Endpoint URL</label>
+                                        <input type="url" class="form-control" id="api-url" 
+                                               placeholder="https://api.example.com/users" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">HTTP Method</label>
+                                        <select class="form-select" id="http-method">
+                                            <option value="GET">GET</option>
+                                            <option value="POST">POST</option>
+                                            <option value="PUT">PUT</option>
+                                            <option value="DELETE">DELETE</option>
+                                            <option value="PATCH">PATCH</option>
+                                            <option value="HEAD">HEAD</option>
+                                            <option value="OPTIONS">OPTIONS</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Headers (JSON or Key:Value format)</label>
+                                        <textarea class="form-control" id="request-headers" rows="4" 
+                                                  placeholder='{"Authorization": "Bearer token", "Content-Type": "application/json"}'></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Request Body (JSON)</label>
+                                        <textarea class="form-control" id="request-body" rows="4" 
+                                                  placeholder='{"key": "value"}'></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Query Parameters</label>
+                                        <textarea class="form-control" id="query-params" rows="2" 
+                                                  placeholder='{"page": 1, "limit": 10}'></textarea>
+                                    </div>
+                                    <div class="col-md-6 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            <i class="fas fa-play"></i> Analyze API
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="analysis-results" class="mt-4" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-line"></i> Analysis Results</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card border-primary">
+                                            <div class="card-header bg-primary text-white">
+                                                <h6><i class="fas fa-info"></i> Basic Info</h6>
+                                            </div>
+                                            <div class="card-body" id="basic-info">
+                                                <!-- Basic info will be populated here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-warning">
+                                            <div class="card-header bg-warning text-dark">
+                                                <h6><i class="fas fa-shield-alt"></i> Security Analysis</h6>
+                                            </div>
+                                            <div class="card-body" id="security-info">
+                                                <!-- Security info will be populated here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="card border-success">
+                                            <div class="card-header bg-success text-white">
+                                                <h6><i class="fas fa-puzzle-piece"></i> API Patterns</h6>
+                                            </div>
+                                            <div class="card-body" id="patterns-info">
+                                                <!-- Patterns info will be populated here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-info">
+                                            <div class="card-header bg-info text-white">
+                                                <h6><i class="fas fa-server"></i> Response Headers</h6>
+                                            </div>
+                                            <div class="card-body" id="headers-info">
+                                                <!-- Headers info will be populated here -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <div class="card border-secondary">
+                                            <div class="card-header bg-secondary text-white">
+                                                <h6><i class="fas fa-code"></i> Response Data</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <pre><code id="response-data" class="language-json"></code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Batch Analysis Tab -->
+                <div id="batch-analysis" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-layer-group"></i> Batch API Analysis</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Endpoints (JSON Array)</label>
+                                <textarea class="form-control" id="batch-endpoints" rows="10" 
+                                          placeholder='[
+  {"url": "https://api.example.com/users", "method": "GET"},
+  {"url": "https://api.example.com/posts", "method": "GET"},
+  {"url": "https://api.example.com/auth", "method": "POST", "headers": {"Content-Type": "application/json"}}
+]'></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="runBatchAnalysis()">
+                                <i class="fas fa-play"></i> Run Batch Analysis
+                            </button>
+                        </div>
+                    </div>
+                    <div id="batch-results" class="mt-4"></div>
+                </div>
+
+                <!-- Endpoint Discovery Tab -->
+                <div id="endpoint-discovery" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-compass"></i> API Endpoint Discovery</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label class="form-label">Base URL</label>
+                                    <input type="url" class="form-control" id="discovery-url" 
+                                           placeholder="https://api.example.com">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button class="btn btn-success w-100" onclick="discoverEndpoints()">
+                                        <i class="fas fa-search"></i> Discover Endpoints
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    This will test common API paths like /api, /v1, /users, /auth, etc.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="discovery-results" class="mt-4"></div>
+                </div>
+
+                <!-- Captured Requests Tab -->
+                <div id="captured-requests" class="tab-content">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5><i class="fas fa-history"></i> Captured Requests</h5>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary" onclick="exportData('json')">
+                                    <i class="fas fa-download"></i> Export JSON
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="exportData('curl')">
+                                    <i class="fas fa-terminal"></i> Export cURL
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="clearCaptured()">
+                                    <i class="fas fa-trash"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="captured-list">
+                                <!-- Captured requests will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentation Tab -->
+                <div id="documentation" class="tab-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-book"></i> Generate API Documentation</h5>
+                        </div>
+                        <div class="card-body">
+                            <button class="btn btn-primary" onclick="generateDocs()">
+                                <i class="fas fa-file-alt"></i> Generate Documentation
+                            </button>
+                            <div id="generated-docs" class="mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Analyzing API...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
